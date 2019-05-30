@@ -1,0 +1,34 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+  log_level: info
+  chef_license: accept-no-persist
+  product-name: chef
+  prodct_version: 14.12.9
+  # You may wish to disable always updating cookbooks in CI or other testing environments.
+  # For example:
+  #   always_update_cookbooks: <%= !ENV['CI'] %>
+  always_update_cookbooks: true
+  client_rb:
+    - chef_license: accept
+
+verifier:
+  name: inspec
+  chef_license: accept-no-persist
+
+
+platforms:
+  - name: ubuntu-16.04
+
+suites:
+  - name: default
+    run_list:
+      - recipe[Web_Dev_Provision::default]
+    verifier:
+      inspec_tests:
+        - test/integration/default
+      chef_license: accept-no-persist
+    attributes:
